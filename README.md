@@ -9,7 +9,7 @@ A modern portfolio website showcasing the work of Amitay Keisar, a developer and
 - **Portfolio Showcase**: Dynamic portfolio with filtering by project type
 - **Project Details**: Detailed view for each portfolio item with image galleries
 - **Contact Form**: Integrated contact form with EmailJS for direct messaging
-- **Featured Projects**: Highlighted projects on the homepage
+- **Featured Projects**: Highlighted projects on the homepage 
 - **Skills & Experience**: Comprehensive sections showcasing technical skills and work experience
 - **SEO Optimized**: Proper meta tags and structured content
 
