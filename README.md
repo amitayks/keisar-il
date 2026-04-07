@@ -173,7 +173,7 @@ This project is personal portfolio website. All rights reserved.
 
 ## 📞 Contact
 
-- **Email**: amiteyk3@gmail.com
+- **Email**: amitay@keisar.studio
 - **Phone**: +972-526-471-797
 - **Website**: [keisar.club](https://keisar.club)
 - **GitHub**: [@amitayks](https://github.com/amitayks)
