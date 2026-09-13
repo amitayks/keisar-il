@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>RAW STOCK &#8212; A Living Showcase of Neo-Brutalism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RAW STOCK &#8212; Neo-Brutalism showcase (skin pack)
+   Skin: neo-brutalism. Craft/QA doctrine kept intact.
+   GEOMETRY LIVES IN CSS VARIABLES &#8212; a viewer can retune the
+   whole system live (see the Machine Shop flourish).
+   ============================================================ */
+:root{
+  /* ---- geometry tokens (live-tunable) ---- */
+  --border:4px;          /* structural border weight        */
+  --shadow-x:8px;        /* hard offset shadow, X            */
+  --shadow-y:8px;        /* hard offset shadow, Y            */
+  --radius:0px;          /* neo-brutalism is square by law   */
+  --tilt:-2deg;          /* sticker rotation                 */
+  --shadow:var(--shadow-x) var(--shadow-y) 0 var(--ink);
+
+  /* ---- palette tokens ---- */
+  --paper:#f4f3ec;
+  --panel:#ffffff;
+  --ink:#0a0a0a;
+  --ink-soft:#33322c;
+  --yellow:#ffdb00;
+  --pink:#ff5da2;
+  --cyan:#38e0e0;
+  --lime:#b6ff3a;
+  --orange:#ff6a2b;
+  --violet:#9b6bff;
+  --blue:#2b6bff;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Space Grotesk",system-ui,sans-serif;
+  font-size:18px;line-height:1.5;
+  overflow-x:hidden;
+  background-image:
+    linear-gradient(var(--ink) 2px,transparent 2px),
+    linear-gradient(90deg,var(--ink) 2px,transparent 2px);
+  background-size:44px 44px;
+  background-position:-2px -2px;
+  background-blend-mode:normal;
+}
+/* faint grid wash so it reads as texture not cage */
+body::before{content:"";position:fixed;inset:0;background:var(--paper);opacity:.94;z-index:-1;}
+::selection{background:var(--pink);color:var(--ink);}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+
+/* ---------- primitives ---------- */
+.display{font-family:"Archivo Black",system-ui,sans-serif;line-height:.92;letter-spacing:-.02em;text-transform:uppercase;}
+.mono{font-family:"Space Mono",monospace;}
+.kicker{
+  font-family:"Space Mono",monospace;font-weight:700;text-transform:uppercase;
+  letter-spacing:.12em;font-size:12px;
+  background:var(--ink);color:var(--yellow);padding:5px 10px;display:inline-block;
+}
+.tag{
+  font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+  border:var(--border) solid var(--ink);padding:4px 9px;display:inline-block;background:var(--panel);
+}
+.box{
+  background:var(--panel);border:var(--border) solid var(--ink);box-shadow:var(--shadow);
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+/* ---------- masthead / nav ---------- */
+header.top{position:sticky;top:0;z-index:60;background:var(--yellow);border-bottom:var(--border) solid var(--ink);}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;}
+.brand{font-family:"Archivo Black",sans-serif;font-size:clamp(24px,4.4vw,40px);text-transform:uppercase;letter-spacing:-.02em;}
+.brand b{color:var(--pink);-webkit-text-stroke:2px var(--ink);}
+.brand .stamp{
+  font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.14em;background:var(--ink);color:var(--yellow);
+  padding:3px 7px;transform:rotate(var(--tilt));display:inline-block;margin-left:6px;vertical-align:middle;
+}
+.top-meta{font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;text-align:right;line-height:1.4;}
+nav.rail{display:flex;gap:10px;padding:0 0 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav.rail::-webkit-scrollbar{display:none;}
+.navlink{
+  appearance:none;cursor:pointer;flex:0 0 auto;white-space:nowrap;
+  font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:13px;letter-spacing:.02em;
+  background:var(--panel);color:var(--ink);border:var(--border) solid var(--ink);
+  padding:11px 16px;min-height:44px;box-shadow:4px 4px 0 var(--ink);
+  transition:transform .08s,box-shadow .08s,background .12s;
+}
+.navlink .n{font-family:"Space Mono",monospace;color:var(--pink);margin-right:7px;}
+.navlink:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink);}
+.navlink[aria-current="true"]{background:var(--pink);box-shadow:4px 4px 0 var(--ink);transform:translate(2px,2px);}
+.navlink[aria-current="true"] .n{color:var(--ink);}
+
+/* ---------- views ---------- */
+main{min-height:60vh;}
+.view{display:none;}
+.view.active{display:block;animation:pop .28s cubic-bezier(.2,.9,.3,1.2) both;}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.99);}to{opacity:1;transform:none;}}
+section.block{padding:52px 0;}
+
+/* ---------- section head ---------- */
+.section-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;}
+.section-head .idx{
+  font-family:"Archivo Black",sans-serif;font-size:clamp(30px,5vw,52px);
+  background:var(--ink);color:var(--lime);padding:6px 16px;box-shadow:var(--shadow);
+}
+.section-head h2{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:clamp(30px,6.5vw,66px);line-height:.9;margin:0;letter-spacing:-.02em;}
+.lede{font-size:clamp(19px,2.3vw,25px);line-height:1.4;font-weight:500;}
+
+/* ---------- OVERVIEW / cover ---------- */
+.hero{padding:44px 0 20px;position:relative;}
+.hero-head{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:clamp(54px,14vw,168px);line-height:.86;letter-spacing:-.03em;margin:0;}
+.hero-head .a{color:var(--ink);}
+.hero-head .b{color:var(--panel);-webkit-text-stroke:3px var(--ink);text-stroke:3px var(--ink);}
+.hero-head .c{background:var(--pink);padding:0 .12em;box-shadow:var(--shadow);display:inline-block;transform:rotate(-1deg);}
+.hero-cards{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;margin-top:30px;align-items:stretch;}
+.hero-cards .lede{padding:22px;}
+.sticker-stack{position:relative;min-height:220px;}
+.sticker{
+  position:absolute;border:var(--border) solid var(--ink);box-shadow:var(--shadow);
+  font-family:"Archivo Black",sans-serif;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;
+}
+.sticker.s1{inset:0 40% 40% 0;background:var(--cyan);font-size:clamp(28px,5vw,52px);transform:rotate(-4deg);}
+.sticker.s2{inset:30% 0 20% 42%;background:var(--yellow);font-size:clamp(20px,3vw,30px);transform:rotate(3deg);}
+.sticker.s3{inset:62% 30% 0 12%;background:var(--violet);color:var(--panel);font-size:clamp(16px,2.4vw,22px);transform:rotate(-1.5deg);}
+
+/* marquee */
+.marquee{border-top:var(--border) solid var(--ink);border-bottom:var(--border) solid var(--ink);background:var(--ink);overflow:hidden;margin-top:36px;}
+.marquee-track{display:flex;gap:40px;white-space:nowrap;animation:scroll 18s linear infinite;padding:12px 0;}
+.marquee span{font-family:"Archivo Black",sans-serif;text-transform:uppercase;color:var(--yellow);font-size:22px;letter-spacing:.02em;}
+.marquee span em{color:var(--pink);font-style:normal;}
+@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* essay */
+.essay{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:20px;}
+.essay p{margin:0 0 1em;font-size:17px;}
+.essay .drop::first-letter{font-family:"Archivo Black",sans-serif;float:left;font-size:4.2em;line-height:.7;padding:.05em .1em 0 0;color:var(--pink);}
+
+/* ---------- PRINCIPLES ---------- */
+.laws{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px;}
+.law{background:var(--panel);border:var(--border) solid var(--ink);box-shadow:var(--shadow);padding:20px;position:relative;}
+.law .lnum{font-family:"Archivo Black",sans-serif;font-size:44px;line-height:.8;}
+.law:nth-child(1){background:var(--yellow);}
+.law:nth-child(2){background:var(--cyan);}
+.law:nth-child(3){background:var(--pink);}
+.law:nth-child(4){background:var(--lime);}
+.law:nth-child(5){background:var(--violet);color:var(--panel);}
+.law:nth-child(6){background:var(--orange);}
+.law h3{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:22px;margin:6px 0 8px;line-height:1;}
+.law p{margin:0;font-weight:500;font-size:16px;}
+.law .ltag{font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-top:12px;display:inline-block;border:2px solid var(--ink);padding:3px 8px;background:rgba(255,255,255,.5);}
+
+/* ---------- GALLERY ---------- */
+.gal{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;grid-auto-flow:dense;}
+.tile{
+  border:var(--border) solid var(--ink);box-shadow:var(--shadow);position:relative;overflow:hidden;
+  min-height:170px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;
+  transition:transform .1s,box-shadow .1s;
+}
+.tile:hover{transform:translate(-3px,-3px);box-shadow:calc(var(--shadow-x) + 4px) calc(var(--shadow-y) + 4px) 0 var(--ink);}
+.tile .th{display:flex;justify-content:space-between;padding:10px 12px;font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;border-bottom:var(--border) solid var(--ink);}
+.tile .tbig{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:clamp(30px,4.4vw,58px);line-height:.85;padding:14px 12px;}
+.tile .tf{font-family:"Space Mono",monospace;font-size:11px;padding:10px 12px;border-top:var(--border) solid var(--ink);text-transform:uppercase;}
+.tile.wide{grid-column:span 4;}
+.tile.tall{grid-column:span 2;grid-row:span 2;min-height:360px;}
+.tile.sm{grid-column:span 2;}
+.tile.med{grid-column:span 3;}
+
+/* ---------- COMPONENTS ---------- */
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.panel{background:var(--panel);border:var(--border) solid var(--ink);box-shadow:var(--shadow);}
+.panel-h{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:var(--border) solid var(--ink);background:var(--ink);}
+.panel-h .t{font-family:"Archivo Black",sans-serif;text-transform:uppercase;color:var(--yellow);font-size:14px;}
+.panel-h .x{font-family:"Space Mono",monospace;font-size:10px;color:var(--panel);opacity:.7;}
+.panel-b{padding:18px 16px;}
+.sub{font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin:0 0 8px;}
+
+.nb-btn{
+  appearance:none;cursor:pointer;font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:14px;
+  border:var(--border) solid var(--ink);background:var(--yellow);color:var(--ink);
+  padding:12px 20px;min-height:44px;box-shadow:5px 5px 0 var(--ink);
+  transition:transform .06s,box-shadow .06s,background .12s;
+}
+.nb-btn:hover{background:var(--lime);}
+.nb-btn:active,.nb-btn.pressed{transform:translate(5px,5px);box-shadow:0 0 0 var(--ink);}
+.nb-btn.pink{background:var(--pink);}
+.nb-btn.cyan{background:var(--cyan);}
+.btn-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+
+.tog{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;margin:10px 0;min-height:44px;}
+.tog .tk{width:64px;height:32px;border:var(--border) solid var(--ink);background:var(--panel);position:relative;flex:0 0 auto;box-shadow:3px 3px 0 var(--ink);}
+.tog .kn{position:absolute;top:2px;left:2px;width:22px;height:22px;background:var(--ink);transition:transform .12s;}
+.tog[aria-pressed="true"] .tk{background:var(--lime);}
+.tog[aria-pressed="true"] .kn{transform:translateX(30px);}
+.tog .lb{font-family:"Space Mono",monospace;font-size:12px;text-transform:uppercase;letter-spacing:.08em;}
+
+.field{margin:14px 0;}
+.field label{display:block;font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin-bottom:6px;}
+.nb-input{width:100%;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:18px;border:var(--border) solid var(--ink);background:var(--panel);color:var(--ink);padding:11px 12px;outline:none;box-shadow:inset 3px 3px 0 rgba(10,10,10,.08);}
+.nb-input:focus{background:var(--yellow);}
+@media(max-width:640px){.nb-input{font-size:16px;}}
+
+.mcard{border:var(--border) solid var(--ink);box-shadow:var(--shadow);overflow:hidden;background:var(--panel);}
+.mcard .top{background:var(--cyan);border-bottom:var(--border) solid var(--ink);padding:16px;display:flex;align-items:center;justify-content:center;min-height:96px;}
+.mcard .top b{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:40px;}
+.mcard .bd{padding:16px;}
+.mcard .k{font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--pink);}
+.mcard .ti{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:22px;margin:6px 0;line-height:1;}
+.mcard p{margin:0;font-size:15px;font-weight:500;}
+
+/* chart */
+.chartbox{border:var(--border) solid var(--ink);box-shadow:var(--shadow);background:var(--panel);}
+.chart-top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:var(--border) solid var(--ink);flex-wrap:wrap;gap:10px;background:var(--yellow);}
+.chart-top .t{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:20px;line-height:1;}
+.legend{display:flex;gap:12px;flex-wrap:wrap;}
+.leg{display:flex;align-items:center;gap:7px;cursor:pointer;font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;min-height:44px;}
+.leg .sw{width:16px;height:16px;border:2px solid var(--ink);}
+.leg[aria-pressed="false"]{opacity:.34;text-decoration:line-through;}
+.chart-hold{padding:12px 10px 4px;position:relative;}
+#tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--yellow);border:2px solid var(--yellow);padding:7px 10px;font-family:"Space Mono",monospace;font-size:11px;transform:translate(-50%,-125%);white-space:nowrap;opacity:0;transition:opacity .1s;z-index:9;}
+#tip b{color:var(--pink);}
+
+/* flourish: machine shop (live geometry) */
+.shop{border:var(--border) solid var(--ink);box-shadow:var(--shadow);background:var(--panel);}
+.shop-ctrls{display:flex;gap:26px;flex-wrap:wrap;padding:18px 16px;border-bottom:var(--border) solid var(--ink);background:var(--violet);}
+.ctl{display:flex;flex-direction:column;gap:6px;min-width:150px;}
+.ctl label{font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--panel);}
+.ctl output{font-family:"Archivo Black",sans-serif;color:var(--yellow);}
+input[type=range]{-webkit-appearance:none;appearance:none;height:6px;background:var(--ink);outline:none;margin:12px 0;border:2px solid var(--ink);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;background:var(--yellow);border:3px solid var(--ink);cursor:pointer;box-shadow:2px 2px 0 var(--ink);}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;background:var(--yellow);border:3px solid var(--ink);cursor:pointer;border-radius:0;}
+.shop-stage{padding:34px 22px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;background:repeating-linear-gradient(45deg,var(--paper),var(--paper) 12px,#e9e8e0 12px,#e9e8e0 24px);}
+.demo-card{background:var(--pink);border:var(--border) solid var(--ink);box-shadow:var(--shadow);border-radius:var(--radius);transform:rotate(var(--tilt));padding:24px 28px;font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:26px;}
+.demo-btn{background:var(--cyan);border:var(--border) solid var(--ink);box-shadow:var(--shadow);border-radius:var(--radius);padding:16px 22px;font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:18px;}
+.demo-badge{background:var(--yellow);border:var(--border) solid var(--ink);box-shadow:var(--shadow);border-radius:var(--radius);transform:rotate(calc(var(--tilt) * -2));padding:14px 18px;font-family:"Space Mono",monospace;font-weight:700;text-transform:uppercase;}
+
+/* ---------- ABOUT ---------- */
+.about{display:grid;grid-template-columns:1.3fr .9fr;gap:34px;align-items:start;margin-top:24px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0;}
+.stat{background:var(--panel);border:var(--border) solid var(--ink);box-shadow:var(--shadow);padding:18px 14px;}
+.stat .v{font-family:"Archivo Black",sans-serif;font-size:clamp(30px,5vw,46px);line-height:.9;}
+.stat .l{font-family:"Space Mono",monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-top:8px;}
+dl.credits dt{font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--pink);margin-top:14px;}
+dl.credits dd{margin:2px 0 0;font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:18px;}
+.prov{border:var(--border) dashed var(--ink);background:var(--yellow);padding:16px 18px;margin-top:22px;font-family:"Space Mono",monospace;font-size:12px;line-height:1.7;}
+.prov b{background:var(--ink);color:var(--yellow);padding:1px 5px;}
+
+/* ---------- footer ---------- */
+footer{border-top:var(--border) solid var(--ink);background:var(--ink);color:var(--paper);padding:26px 0 54px;margin-top:44px;}
+.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.foot .fb{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:28px;color:var(--yellow);}
+.foot .fb b{color:var(--pink);}
+.foot .fm{font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;}
+
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  .hero-cards,.essay,.laws,.panels,.about{grid-template-columns:1fr;}
+  .gal{grid-template-columns:repeat(4,1fr);}
+  .tile.wide,.tile.med{grid-column:span 4;}
+}
+@media(max-width:640px){
+  body{font-size:17px;background-size:32px 32px;}
+  .wrap{padding:0 16px;}
+  section.block{padding:38px 0;}
+  .hero-head{font-size:clamp(46px,17vw,90px);}
+  .sticker-stack{min-height:300px;}
+  .gal{grid-template-columns:repeat(2,1fr);}
+  .tile.wide,.tile.med,.tile.tall,.tile.sm{grid-column:span 2;grid-row:span 1;min-height:160px;}
+  .stats{grid-template-columns:1fr;}
+  .shop-ctrls{flex-direction:column;gap:14px;}
+  .ctl{min-width:0;}
+  .top-meta{display:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;}
+  .marquee-track{animation:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP / NAV ============ -->
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand">RAW&nbsp;<b>STOCK</b><span class="stamp">EST. MMXXVI</span></div>
+      <div class="top-meta">ISSUE 01 / SIX LAWS<br>A SHOWCASE OF<br>NEO-BRUTALISM</div>
+    </div>
+    <nav class="rail" id="rail" aria-label="Primary">
+      <button class="navlink" data-view="overview" aria-current="true"><span class="n">01</span>Overview</button>
+      <button class="navlink" data-view="principles"><span class="n">02</span>Principles</button>
+      <button class="navlink" data-view="gallery"><span class="n">03</span>Gallery</button>
+      <button class="navlink" data-view="components"><span class="n">04</span>Machine Shop</button>
+      <button class="navlink" data-view="about"><span class="n">05</span>About</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 01 &#183; OVERVIEW ============ -->
+<div class="view active" id="view-overview">
+  <section class="hero wrap">
+    <span class="kicker">The Movement / Origins / A Manifesto</span>
+    <h1 class="hero-head">
+      <span class="a">CONCRETE</span><br>
+      <span class="b">HONEST</span> <span class="c">LOUD</span>
+    </h1>
+    <div class="hero-cards">
+      <div class="lede box">Neo-Brutalism strips the interface to its structural bones and refuses to apologise for them. Thick borders, hard shadows with <u>no blur</u>, clashing saturated colour, and type set like poured concrete. Nothing is hidden; nothing is soft.</div>
+      <div class="sticker-stack" aria-hidden="true">
+        <div class="sticker s1">AA</div>
+        <div class="sticker s2">NO&nbsp;BLUR</div>
+        <div class="sticker s3">RAW BY DESIGN</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marq"></div>
+  </div>
+
+  <section class="block wrap">
+    <div class="section-head">
+      <span class="idx">01</span>
+      <h2>Why So Loud</h2>
+    </div>
+    <div class="essay">
+      <div>
+        <p class="drop">Neo-Brutalism grew out of a rebellion against the frictionless, rounded, drop-shadowed sameness of the mid-2010s app. Where that idiom smoothed every edge into a soft grey blur, brutalism does the opposite: it makes the structure loud. A border is not a hairline apology; it is architecture. A shadow does not diffuse; it lands like a stamped block.</p>
+        <p>The name borrows from the raw poured concrete of architectural Brutalism &mdash; b&eacute;ton brut &mdash; and carries the same ethic onto the screen: show the material, celebrate the joins, let the system be visibly a system.</p>
+      </div>
+      <div>
+        <p>What makes it work is <b>honesty under discomfort</b>. The clashing colours and hard geometry are not chaos; they are a strict grammar. Every element sits on the same square grid, wears the same border weight, casts the same offset shadow. Change one geometric constant and the whole page re-tunes together &mdash; which is exactly what the Machine Shop lets you do, live.</p>
+        <p>This showcase is set entirely in the idiom. Turn the page for the six laws, walk the gallery, then retune the geometry yourself.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 02 &#183; PRINCIPLES ============ -->
+<div class="view" id="view-principles">
+  <section class="block wrap">
+    <div class="section-head">
+      <span class="idx">02</span>
+      <h2>Six Laws</h2>
+    </div>
+    <p class="lede" style="max-width:52ch;margin:6px 0 4px;">The grammar is strict. Break the polish, never the system.</p>
+    <div class="laws">
+      <div class="law"><div class="lnum">1</div><h3>Structure Exposed</h3><p>Show the material. Borders, grids, and joins are celebrated, not hidden. The system should be visibly a system.</p><span class="ltag">borders / grid / joins</span></div>
+      <div class="law"><div class="lnum">2</div><h3>Hard Shadows, No Blur</h3><p>Shadows are solid offset blocks &mdash; a flat colour pushed X and Y, zero blur. They read as physical weight, not atmosphere.</p><span class="ltag">offset / solid / weight</span></div>
+      <div class="law"><div class="lnum">3</div><h3>Loud, Clashing Colour</h3><p>Saturated primaries and secondaries set against each other with no gentle gradient between. Contrast is the point.</p><span class="ltag">saturated / clash / contrast</span></div>
+      <div class="law"><div class="lnum">4</div><h3>Square by Default</h3><p>Corners are sharp. Radius is zero unless a deliberate, single exception is making an argument. The rectangle is the unit.</p><span class="ltag">radius:0 / rectangle</span></div>
+      <div class="law"><div class="lnum">5</div><h3>Type as a Brick</h3><p>Oversized, heavy, uppercase display type poured into the layout as a structural block &mdash; not decoration, but load-bearing.</p><span class="ltag">heavy / uppercase / block</span></div>
+      <div class="law"><div class="lnum">6</div><h3>Deliberate Discomfort</h3><p>A tilt, a clash, an over-large stamp. The friction is intentional &mdash; anti-polish that signals confidence, never accident.</p><span class="ltag">tilt / friction / intent</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 03 &#183; GALLERY ============ -->
+<div class="view" id="view-gallery">
+  <section class="block wrap">
+    <div class="section-head">
+      <span class="idx">03</span>
+      <h2>Gallery</h2>
+    </div>
+    <p class="lede" style="max-width:48ch;margin:6px 0 22px;">Ten specimens in the brutalist idiom. <span class="mono" style="font-size:13px;">HOVER TO SHIFT.</span></p>
+    <div class="gal" id="gal"><!-- filled by JS --></div>
+  </section>
+</div>
+
+<!-- ============ 04 &#183; COMPONENTS / MACHINE SHOP ============ -->
+<div class="view" id="view-components">
+  <section class="block wrap">
+    <div class="section-head">
+      <span class="idx">04</span>
+      <h2>Machine Shop</h2>
+    </div>
+    <p class="lede" style="max-width:54ch;margin:6px 0 26px;">Everything is live DOM. Retune the geometry, press the buttons, interrogate the chart.</p>
+
+    <!-- FLOURISH: live geometry -->
+    <span class="kicker" style="margin-bottom:10px;">Style Flourish / Live Geometry Tokens</span>
+    <div class="shop" style="margin-top:10px;">
+      <div class="shop-ctrls">
+        <div class="ctl"><label>Border <output id="bOut">4</output>px</label><input type="range" id="bR" min="0" max="12" value="4" step="1" aria-label="Border width"></div>
+        <div class="ctl"><label>Shadow <output id="sOut">8</output>px</label><input type="range" id="sR" min="0" max="24" value="8" step="1" aria-label="Shadow offset"></div>
+        <div class="ctl"><label>Radius <output id="rOut">0</output>px</label><input type="range" id="rR" min="0" max="40" value="0" step="1" aria-label="Corner radius"></div>
+        <div class="ctl"><label>Tilt <output id="tOut">-2</output>&deg;</label><input type="range" id="tR" min="-10" max="10" value="-2" step="1" aria-label="Tilt"></div>
+      </div>
+      <div class="shop-stage">
+        <div class="demo-card">Poured Block</div>
+        <div class="demo-btn">Press Me</div>
+        <div class="demo-badge">NEW / RAW</div>
+      </div>
+    </div>
+    <p class="mono" style="font-size:12px;margin-top:10px;">The sliders write <b>--border</b>, <b>--shadow-x/y</b>, <b>--radius</b> and <b>--tilt</b> on the whole document &mdash; every surface above re-tunes with them.</p>
+
+    <hr style="border:0;border-top:var(--border) solid var(--ink);margin:36px 0;">
+
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-h"><span class="t">Controls</span><span class="x">/ live</span></div>
+        <div class="panel-b">
+          <p class="sub">Buttons</p>
+          <div class="btn-row">
+            <button class="nb-btn" onclick="press(this,'Poured')">Pour It</button>
+            <button class="nb-btn pink" onclick="press(this,'Stamped')">Stamp</button>
+            <button class="nb-btn cyan" onclick="press(this,'Broke it')">Break</button>
+          </div>
+          <div id="echo" class="mono" style="font-size:12px;margin-top:12px;color:var(--pink);min-height:16px;">&nbsp;</div>
+          <hr style="border:0;border-top:2px solid var(--ink);margin:18px 0;">
+          <p class="sub">Switches</p>
+          <div class="tog" role="switch" aria-pressed="true" onclick="tog(this)"><span class="tk"><span class="kn"></span></span><span class="lb" data-on="Shadows on" data-off="Shadows off">Shadows on</span></div>
+          <div class="tog" role="switch" aria-pressed="false" onclick="tog(this)"><span class="tk"><span class="kn"></span></span><span class="lb" data-on="Tilt on" data-off="Tilt off">Tilt off</span></div>
+          <hr style="border:0;border-top:2px solid var(--ink);margin:18px 0;">
+          <div class="field"><label for="hl">Type a label</label><input class="nb-input" id="hl" value="RAW STOCK" maxlength="24" aria-label="Card label"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><span class="t">Live Card</span><span class="x">/ mirrors input</span></div>
+        <div class="panel-b">
+          <div class="mcard">
+            <div class="top"><b id="cardBig">RS</b></div>
+            <div class="bd">
+              <div class="k">Specimen / Live</div>
+              <div class="ti" id="cardTi">RAW STOCK</div>
+              <p>A card poured in the brutalist idiom &mdash; its label mirrors the field as you type.</p>
+              <div style="margin-top:14px;"><button class="nb-btn" style="padding:9px 15px;font-size:12px;box-shadow:3px 3px 0 var(--ink);" onclick="press(this,'Opened')">Open &rsaquo;</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr style="border:0;border-top:var(--border) solid var(--ink);margin:36px 0;">
+
+    <span class="kicker" style="margin-bottom:10px;">Live Data / Interactive Chart</span>
+    <div class="chartbox" style="margin-top:10px;">
+      <div class="chart-top">
+        <div>
+          <div class="t">Adoption by Surface</div>
+          <div class="mono" style="font-size:11px;margin-top:4px;">Share of new UI shipped in the brutalist idiom &mdash; hover a bar</div>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="chart-hold">
+        <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;overflow:visible;"></svg>
+        <div id="tip"></div>
+      </div>
+    </div>
+    <p class="mono" style="font-size:11px;margin-top:10px;">Provenance &mdash; illustrative dataset, hand-drawn in SVG for this showcase. No live source.</p>
+  </section>
+</div>
+
+<!-- ============ 05 &#183; ABOUT ============ -->
+<div class="view" id="view-about">
+  <section class="block wrap">
+    <div class="section-head">
+      <span class="idx">05</span>
+      <h2>About</h2>
+    </div>
+    <div class="about">
+      <div>
+        <p class="lede" style="max-width:56ch;">Raw Stock is a single-file, fully live demonstration of Neo-Brutalism &mdash; the interface idiom that treats structure as ornament and refuses to smooth its own edges.</p>
+        <p style="font-weight:500;max-width:60ch;">Nothing here is a mock-up. Every button lands, every switch flips, the chart answers your cursor, and the Machine Shop rewrites the document's geometry tokens in real time. Type is set in <b>Archivo Black</b> for display, <b>Space Grotesk</b> for body, and <b>Space Mono</b> for the labels and stamps.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">5</div><div class="l">Navigable Views</div></div>
+          <div class="stat"><div class="v">100%</div><div class="l">Live DOM</div></div>
+          <div class="stat"><div class="v">390px</div><div class="l">Zero H-Scroll</div></div>
+        </div>
+        <div class="prov">
+          <b>PROVENANCE.</b> Self-contained single HTML file / all CSS &amp; JS inline / Google Fonts via &lt;link&gt; / chart &amp; art hand-drawn in SVG+CSS / no external data source / illustrative chart labelled as such / geometry driven by live CSS variables.<br>
+          <b>BUILT.</b> Raw Stock / Issue 01 / Six Laws / MMXXVI.
+        </div>
+      </div>
+      <aside>
+        <dl class="credits">
+          <dt>Skin</dt><dd>Neo-Brutalism</dd>
+          <dt>Display</dt><dd>Archivo Black</dd>
+          <dt>Body</dt><dd>Space Grotesk</dd>
+          <dt>Labels</dt><dd>Space Mono</dd>
+          <dt>Geometry</dt><dd>CSS Variables</dd>
+          <dt>Palette</dt><dd>Yellow / Pink / Cyan / Lime</dd>
+        </dl>
+        <div class="demo-badge" style="margin-top:22px;display:inline-block;">DESIGN THE STRUCTURE</div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="fb">RAW&nbsp;<b>STOCK</b></div>
+    <div class="fm">A Living Showcase of Neo-Brutalism / MMXXVI</div>
+    <button class="nb-btn" onclick="go('overview');window.scrollTo({top:0,behavior:'smooth'});">&uarr; Top</button>
+  </div>
+</footer>
+
+<script>
+/* ================= ROUTING ================= */
+const views=['overview','principles','gallery','components','about'];
+function go(v){
+  if(!views.includes(v)) v='overview';
+  views.forEach(id=>document.getElementById('view-'+id).classList.toggle('active',id===v));
+  document.querySelectorAll('.navlink').forEach(b=>b.setAttribute('aria-current',b.dataset.view===v?'true':'false'));
+  if(location.hash!=='#'+v){ try{history.replaceState(null,'','#'+v);}catch(e){} }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('rail').addEventListener('click',e=>{const b=e.target.closest('.navlink');if(b)go(b.dataset.view);});
+window.addEventListener('hashchange',()=>go(location.hash.slice(1)));
+go(location.hash.slice(1)||'overview');
+
+/* ================= MARQUEE ================= */
+const words=['CONCRETE','<em>NO BLUR</em>','HONEST','SQUARE BY LAW','LOUD','<em>HARD SHADOWS</em>','RAW STOCK','SIX LAWS','<em>CLASH</em>','EXPOSED STRUCTURE'];
+const one=words.map(w=>`<span>${w}</span><span>&#9632;</span>`).join('');
+document.getElementById('marq').innerHTML=one+one;
+
+/* ================= GALLERY ================= */
+const specs=[
+  {cls:'tall',n:'A.01',big:'Aa',f:'Type Brick / Archivo',bg:'var(--yellow)'},
+  {cls:'wide',n:'A.02',big:'NO BLUR',f:'Shadow Study',bg:'var(--cyan)'},
+  {cls:'sm',n:'A.03',big:'&#9632;',f:'Solid Block',bg:'var(--pink)'},
+  {cls:'sm',n:'A.04',big:'+',f:'Join',bg:'var(--lime)'},
+  {cls:'med',n:'A.05',big:'CLASH',f:'Colour Pair',bg:'var(--orange)'},
+  {cls:'sm',n:'A.06',big:'&#9650;',f:'Tilt',bg:'var(--violet)',fg:'var(--panel)'},
+  {cls:'sm',n:'A.07',big:'01',f:'Stamp',bg:'var(--yellow)'},
+  {cls:'med',n:'A.08',big:'%',f:'Data Brick',bg:'var(--cyan)'},
+  {cls:'sm',n:'A.09',big:'&#9723;',f:'Frame',bg:'var(--pink)'},
+];
+document.getElementById('gal').innerHTML=specs.map(s=>`
+  <figure class="tile ${s.cls}" tabindex="0" style="background:${s.bg};${s.fg?'color:'+s.fg+';':''}" aria-label="${s.f}">
+    <div class="th"><span>${s.n}</span><span>RAW</span></div>
+    <div class="tbig">${s.big}</div>
+    <div class="tf">${s.f}</div>
+  </figure>`).join('');
+
+/* ================= COMPONENT INTERACTIONS ================= */
+function press(btn,label){
+  const e=document.getElementById('echo');
+  if(e) e.textContent='>> '+label+' @ '+new Date().toLocaleTimeString();
+  btn.classList.add('pressed');setTimeout(()=>btn.classList.remove('pressed'),140);
+}
+function tog(el){
+  const on=el.getAttribute('aria-pressed')==='true';
+  el.setAttribute('aria-pressed',on?'false':'true');
+  const lb=el.querySelector('.lb');lb.textContent=on?lb.dataset.off:lb.dataset.on;
+}
+const hl=document.getElementById('hl'),cardTi=document.getElementById('cardTi'),cardBig=document.getElementById('cardBig');
+hl.addEventListener('input',()=>{
+  const v=hl.value||'UNTITLED';
+  cardTi.textContent=v;
+  cardBig.textContent=v.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase()||'RS';
+});
+
+/* ================= FLOURISH: live geometry ================= */
+const root=document.documentElement;
+const bR=document.getElementById('bR'),sR=document.getElementById('sR'),rR=document.getElementById('rR'),tR=document.getElementById('tR');
+const bOut=document.getElementById('bOut'),sOut=document.getElementById('sOut'),rOut=document.getElementById('rOut'),tOut=document.getElementById('tOut');
+function retune(){
+  root.style.setProperty('--border',bR.value+'px');
+  root.style.setProperty('--shadow-x',sR.value+'px');
+  root.style.setProperty('--shadow-y',sR.value+'px');
+  root.style.setProperty('--radius',rR.value+'px');
+  root.style.setProperty('--tilt',tR.value+'deg');
+  bOut.textContent=bR.value;sOut.textContent=sR.value;rOut.textContent=rR.value;tOut.textContent=tR.value;
+}
+[bR,sR,rR,tR].forEach(r=>r.addEventListener('input',retune));
+
+/* ================= INTERACTIVE SVG BAR CHART ================= */
+const surfaces=['Portfolios','Landing','Dashboards','Docs','Commerce','Mobile'];
+const series=[
+  {name:'2023',color:'var(--cyan)',hex:'#38e0e0',on:true,data:[38,22,10,14,8,6]},
+  {name:'2025',color:'var(--pink)',hex:'#ff5da2',on:true,data:[61,48,26,33,22,19]},
+];
+const svg=document.getElementById('chart');
+const W=720,H=320,padL=48,padR=16,padT=18,padB=44;
+const plotW=W-padL-padR,plotH=H-padT-padB,maxY=70;
+const yAt=v=>padT+plotH-(plotH*v/maxY);
+const tip=document.getElementById('tip');
+function draw(){
+  const active=series.filter(s=>s.on);
+  const groups=surfaces.length;
+  const gW=plotW/groups;
+  let s='';
+  for(let g=0;g<=70;g+=10){const y=yAt(g);
+    s+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#0a0a0a" stroke-opacity="0.16" stroke-width="1"/>`;
+    s+=`<text x="${padL-10}" y="${y+4}" text-anchor="end" font-family="Space Mono" font-size="11" fill="#33322c">${g}</text>`;}
+  s+=`<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+plotH}" stroke="#0a0a0a" stroke-width="3"/>`;
+  s+=`<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="#0a0a0a" stroke-width="3"/>`;
+  surfaces.forEach((name,gi)=>{
+    const gx=padL+gi*gW;
+    const barW=Math.min(30,(gW-16)/Math.max(active.length,1));
+    active.forEach((se,bi)=>{
+      const v=se.data[gi];const x=gx+(gW/2)-(active.length*barW/2)+bi*barW;const y=yAt(v);const h=(padT+plotH)-y;
+      s+=`<rect class="bar" data-name="${se.name}" data-surf="${name}" data-val="${v}" x="${x}" y="${y}" width="${barW-3}" height="${h}" fill="${se.hex}" stroke="#0a0a0a" stroke-width="3" style="cursor:pointer"/>`;
+      s+=`<rect x="${x+3}" y="${y+3}" width="${barW-3}" height="${h}" fill="#0a0a0a" opacity="0.0"/>`;
+    });
+    s+=`<text x="${gx+gW/2}" y="${H-16}" text-anchor="middle" font-family="Space Mono" font-size="11" fill="#33322c">${name}</text>`;
+  });
+  svg.innerHTML=s;
+  svg.querySelectorAll('.bar').forEach(b=>{
+    b.addEventListener('mouseenter',showTip);b.addEventListener('mousemove',showTip);
+    b.addEventListener('mouseleave',()=>tip.style.opacity=0);b.addEventListener('click',showTip);
+  });
+}
+function showTip(e){
+  const t=e.target,rect=svg.getBoundingClientRect();
+  const sx=rect.width/W,sy=rect.height/H;
+  const x=(+t.getAttribute('x')+ +t.getAttribute('width')/2)*sx;
+  const y=(+t.getAttribute('y'))*sy;
+  tip.innerHTML=`${t.dataset.surf} &middot; ${t.dataset.name}<br><b>${t.dataset.val}%</b> of new UI`;
+  tip.style.left=x+'px';tip.style.top=y+'px';tip.style.opacity=1;
+}
+const legend=document.getElementById('legend');
+legend.innerHTML=series.map((se,i)=>`<div class="leg" role="switch" aria-pressed="true" data-s="${i}"><span class="sw" style="background:${se.hex}"></span>${se.name}</div>`).join('');
+legend.querySelectorAll('.leg').forEach(l=>l.addEventListener('click',()=>{
+  const i=+l.dataset.s;if(series.filter(s=>s.on).length===1&&series[i].on)return;
+  series[i].on=!series[i].on;l.setAttribute('aria-pressed',series[i].on?'true':'false');draw();
+}));
+draw();
+</script>
+</body>
+</html>
